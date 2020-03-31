@@ -1,4 +1,4 @@
 package de.jenkinsutil.payload.out;
 
-public class BuildDistribution {
+public class Timeline {
 }
