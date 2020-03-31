@@ -1,4 +1,4 @@
-package de.jenkinsutil.payload;
+package de.jenkinsutil.payload.mapping;
 
 public interface PayloadMapper<I,T> {
 
