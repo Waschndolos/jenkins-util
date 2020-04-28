@@ -10,7 +10,7 @@ export class BuildOverviewService {
   constructor(private http: HttpClient) { }
 
   getBuildOverview(): Observable<any[]> {
-    return this.http.get<any[]>("/api/v1/jenkins/build/distribution")
+    return this.http.get<any[]>('/api/v1/jenkins/build/distribution')
   }
 
 }
