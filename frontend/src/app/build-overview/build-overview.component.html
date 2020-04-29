@@ -1,6 +1,6 @@
-<div class="container">
-
-    <calendar-heatmap class="fill"[data]="data"
-                      (handler)="print($event)">>
-    </calendar-heatmap>
-</div>
+<apx-chart
+        [series]="series"
+        [chart]="chartOptions.chart"
+        [plotOptions]="chartOptions.plotOptions"
+        [xaxis]="chartOptions.xaxis"
+></apx-chart>
