@@ -10,7 +10,18 @@ public class BuildJob {
     @JsonProperty("y")
     private long[] startAndEnd = new long[2];
 
-//    @JsonProperty("fillColor")
+    @JsonProperty("jobName")
+    private String jobName;
+
+    public String getJobName() {
+        return jobName;
+    }
+
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
+    }
+
+    //    @JsonProperty("fillColor")
 //    private String fillColor;
 
     public void setNodeName(String nodeName) {

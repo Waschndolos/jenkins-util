@@ -1,14 +1,13 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {BuildOverviewService} from '../services/build-overview.service';
-import {ApexChart, ApexPlotOptions, ApexXAxis, ChartComponent} from 'ng-apexcharts';
-import {ApexResponsive} from "ng-apexcharts/lib/model/apex-types";
+import {ApexChart, ApexPlotOptions, ApexTooltip, ApexXAxis} from 'ng-apexcharts';
 
 export interface ChartOptions {
-    // series: ApexAxisChartSeries;
     chart: ApexChart;
     xaxis: ApexXAxis;
     plotOptions: ApexPlotOptions;
-    responsive: ApexResponsive;
+    tooltip: ApexTooltip;
+    datalabels: ApexDataLabels;
 }
 
 @Component({
@@ -16,10 +15,10 @@ export interface ChartOptions {
     templateUrl: './build-overview.component.html',
     styleUrls: ['./build-overview.component.css']
 })
-export class BuildOverviewComponent implements OnInit {
+export class BuildOverviewComponent {
 
-    @ViewChild('chart')
-    public chart: ChartComponent;
+    // @ViewChild('chart')
+    // public chart: ChartComponent;
 
     public chartOptions: ChartOptions = {
         chart: {
@@ -32,67 +31,44 @@ export class BuildOverviewComponent implements OnInit {
                 horizontal: true
             }
         },
-        xaxis: {
-            type: 'datetime'
+        datalabels: {
+            enabled: true
         },
-        responsive: [
-            {
-                breakpoint: 1000,
-                options: {
-                    plotOptions: {
-                        bar: {
-                            horizontal: false
-                        }
-                    },
-                    legend: {
-                        position: 'bottom'
-                    }
-                }
+        tooltip: {
+            enabled: true,
+            shared: true,
+            custom: function ({series, seriesIndex, dataPointIndex, w}) {
+                return ('<div class="arrow_box">' +
+                     '<span>' + JSON.stringify(series[seriesIndex]) + '</span>' +
+                    '</div>')
             }
-        ]
+        },
+        xaxis: {
+            tooltip: {
+                enabled: true
+            },
+            labels: {
+                format: 'dd.MM - HH:mm'
+            },
+            type: 'datetime'
+        }
 
     };
     series: any = [];
+    builtOn: string;
+    jobName: string;
 
-
-    constructor(private buildOverviewService: BuildOverviewService) {
-        this.buildOverviewService.getBuildOverview().subscribe(data => {
-            console.log(data);
+    onRefresh() {
+        this.buildOverviewService.getBuildOverview(this.builtOn, this.jobName).subscribe(data => {
+            console.log(data.series)
             this.series = data.series;
-            // @ts-ignore
-            // this.chartOptions =  {
-            //     chart: {
-            //         height: '100%',
-            //         width: '100%',
-            //         type: 'rangeBar'
-            //     },
-            //     plotOptions: {
-            //         bar: {
-            //             horizontal: true
-            //         }
-            //     },
-            //     xaxis: {
-            //         type: 'datetime'
-            //     },
-            //     // responsive: {
-            //     //     breakpoint: 1000,
-            //     //     options: {
-            //     //         plotOptions: {
-            //     //             bar: {
-            //     //                 horizontal: false
-            //     //             }
-            //     //         },
-            //     //         legend: {
-            //     //             position: 'bottom'
-            //     //         }
-            //     //     }
-            //     // }
-            // };
         });
     }
 
-    ngOnInit(): void {
-
+    constructor(private buildOverviewService: BuildOverviewService) {
+        this.buildOverviewService.getBuildOverview(this.builtOn, this.jobName).subscribe(data => {
+            this.series = data.series;
+        });
     }
 
 }

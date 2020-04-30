@@ -5,6 +5,7 @@ import de.jenkinsutil.service.BuildDistributionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -21,8 +22,8 @@ public class BuildDistributionController {
     }
 
     @GetMapping("/distribution")
-    public ResponseEntity<SeriesHolder> getBuildDistribution() throws IOException {
-        Optional<SeriesHolder> optional = buildDistributionService.getBuildDays();
+    public ResponseEntity<SeriesHolder> getBuildDistribution(@RequestParam(name = "filter", required = false) String filter) throws IOException {
+        Optional<SeriesHolder> optional = buildDistributionService.getBuildDays(filter);
         return optional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
     }
 

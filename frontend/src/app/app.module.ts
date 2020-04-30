@@ -8,6 +8,7 @@ import {GrafanaComponent} from './grafana/grafana.component';
 import {BuildOverviewComponent} from './build-overview/build-overview.component';
 import {HttpClientModule} from '@angular/common/http';
 import {NgApexchartsModule} from 'ng-apexcharts';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -16,12 +17,13 @@ import {NgApexchartsModule} from 'ng-apexcharts';
     GrafanaComponent,
     BuildOverviewComponent
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    NgApexchartsModule,
-    AppRoutingModule
-  ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        NgApexchartsModule,
+        AppRoutingModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

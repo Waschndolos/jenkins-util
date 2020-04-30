@@ -1,6 +1,25 @@
+<form>
+    <div class="form-row">
+        <div class="col">
+            <div class="form-group form-inline">
+                BuiltOn: <input class="form-control ml-2" type="text" name="builtOn" [(ngModel)]="builtOn">
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group form-inline">
+                JobName: <input class="form-control ml-2" type="text" name="jobName" [(ngModel)]="jobName">
+            </div>
+        </div>
+
+        <div class="col">
+            <button (click)="onRefresh()" class="btn btn-primary">Refresh</button>
+        </div>
+    </div>
+</form>
 <apx-chart
         [series]="series"
         [chart]="chartOptions.chart"
         [plotOptions]="chartOptions.plotOptions"
         [xaxis]="chartOptions.xaxis"
+        [tooltip]="chartOptions.tooltip"
 ></apx-chart>
