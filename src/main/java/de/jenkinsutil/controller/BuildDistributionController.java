@@ -22,8 +22,12 @@ public class BuildDistributionController {
     }
 
     @GetMapping("/distribution")
-    public ResponseEntity<SeriesHolder> getBuildDistribution(@RequestParam(name = "filter", required = false) String filter) throws IOException {
-        Optional<SeriesHolder> optional = buildDistributionService.getBuildDays(filter);
+    public ResponseEntity<SeriesHolder> getBuildDistribution(
+            @RequestParam(name = "builtOn", required = false) String builtOn,
+            @RequestParam(name = "jobName", required = false) String jobName,
+            @RequestParam(name = "lookbackDays", required = false) String lookbackDays
+    ) throws IOException {
+        Optional<SeriesHolder> optional = buildDistributionService.getBuildDays(builtOn, jobName, lookbackDays);
         return optional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
     }
 

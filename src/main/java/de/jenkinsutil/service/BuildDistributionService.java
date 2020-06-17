@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.jenkinsutil.payload.in.JenkinsBuildDistribution;
 import de.jenkinsutil.payload.mapping.BuildDistributionMapper;
+import de.jenkinsutil.payload.mapping.Filter;
 import de.jenkinsutil.payload.out.SeriesHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -22,9 +23,9 @@ public class BuildDistributionService {
         this.buildDistributionMapper = buildDistributionMapper;
     }
 
-    public Optional<SeriesHolder> getBuildDays(String filter) throws IOException {
+    public Optional<SeriesHolder> getBuildDays(String builtOn, String jobName, String lookbackDays) throws IOException {
         JenkinsBuildDistribution jenkinsBuildDistribution = readBuildDistribution();
-        return Optional.of(buildDistributionMapper.convert(jenkinsBuildDistribution, filter));
+        return Optional.of(buildDistributionMapper.convert(jenkinsBuildDistribution, new Filter(builtOn, jobName, lookbackDays)));
     }
 
     private JenkinsBuildDistribution readBuildDistribution() throws IOException {

@@ -1,15 +1,26 @@
 <form>
     <div class="form-row">
-        <div class="col">
-            <div class="form-group form-inline">
-                BuiltOn: <input class="form-control ml-2" type="text" name="builtOn" [(ngModel)]="builtOn">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="host">Host</span>
             </div>
+            <input class="form-control ml-2" type="text" name="builtOn" [(ngModel)]="builtOn">
         </div>
-        <div class="col">
-            <div class="form-group form-inline">
-                JobName: <input class="form-control ml-2" type="text" name="jobName" [(ngModel)]="jobName">
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="job">Job</span>
             </div>
+            <input class="form-control ml-2" type="text" name="jobName" [(ngModel)]="jobName">
         </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="lookbackDays">- days</span>
+            </div>
+            <input class="form-control ml-2" type="number" name="lookbackDays" [(ngModel)]="lookbackDays" [defaultValue]="2">
+        </div>
+
 
         <div class="col">
             <button (click)="onRefresh()" class="btn btn-primary">Refresh</button>
@@ -22,4 +33,5 @@
         [plotOptions]="chartOptions.plotOptions"
         [xaxis]="chartOptions.xaxis"
         [tooltip]="chartOptions.tooltip"
+
 ></apx-chart>

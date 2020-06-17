@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {BuildOverviewService} from '../services/build-overview.service';
 import {ApexChart, ApexPlotOptions, ApexTooltip, ApexXAxis} from 'ng-apexcharts';
 
@@ -17,12 +17,8 @@ export interface ChartOptions {
 })
 export class BuildOverviewComponent {
 
-    // @ViewChild('chart')
-    // public chart: ChartComponent;
-
-    public chartOptions: ChartOptions = {
+     public chartOptions: ChartOptions = {
         chart: {
-            height: '1000',
             width: '100%',
             type: 'rangeBar'
         },
@@ -52,21 +48,22 @@ export class BuildOverviewComponent {
             },
             type: 'datetime'
         }
-
     };
     series: any = [];
     builtOn: string;
     jobName: string;
+    lookbackDays: number = 2;
 
     onRefresh() {
-        this.buildOverviewService.getBuildOverview(this.builtOn, this.jobName).subscribe(data => {
-            console.log(data.series)
+        this.buildOverviewService.getBuildOverview(this.builtOn, this.jobName, this.lookbackDays.toString()).subscribe(data => {
+            console.log(JSON.stringify(data.series))
             this.series = data.series;
         });
     }
 
     constructor(private buildOverviewService: BuildOverviewService) {
-        this.buildOverviewService.getBuildOverview(this.builtOn, this.jobName).subscribe(data => {
+        this.buildOverviewService.getBuildOverview(this.builtOn, this.jobName, this.lookbackDays.toString()).subscribe(data => {
+            console.log(JSON.stringify(data.series))
             this.series = data.series;
         });
     }

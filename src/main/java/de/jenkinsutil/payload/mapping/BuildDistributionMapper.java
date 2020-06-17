@@ -15,16 +15,16 @@ import java.util.*;
 @Component
 public class BuildDistributionMapper {
 
-    public SeriesHolder convert(JenkinsBuildDistribution input, String filter) {
+    public SeriesHolder convert(JenkinsBuildDistribution input, Filter filter) {
 
         SeriesHolder holder = new SeriesHolder();
 
         Map<String, Series> seriesMap = new HashMap<>();
         List<JenkinsJob> jobs = input.getJobs();
         for (JenkinsJob job : jobs) {
-            List<String> jobFilter = getJobFilter(filter);
-            if (!jobFilter.isEmpty()) {
-                if (jobFilter.stream().noneMatch(j -> job.getName().startsWith(j))) {
+            String jobName = filter.getJobName();
+            if (!jobName.isEmpty()) {
+                if (!job.getName().startsWith(jobName)) {
                     continue;
                 }
             }
@@ -38,16 +38,17 @@ public class BuildDistributionMapper {
                     continue;
                 }
 
-                List<String> builtOnFilter = getBuiltOnFilter(filter);
-                if (!builtOnFilter.isEmpty()) {
-                    if (builtOnFilter.stream().noneMatch(b -> build.getBuiltOn().startsWith(b))) {
+                String builtOn = filter.getBuiltOn();
+                if (!builtOn.isEmpty()) {
+                    if (!build.getBuiltOn().startsWith(builtOn)) {
                         continue;
                     }
                 }
 
                 long timestamp = build.getTimestamp();
                 LocalDateTime buildStart = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), TimeZone.getDefault().toZoneId());
-                if (buildStart.isBefore(LocalDateTime.now().minusDays(2))) {
+                long lookbackDays = Long.parseLong(filter.getLookbackDays());
+                if (buildStart.isBefore(LocalDateTime.now().minusDays(lookbackDays))) {
                     continue;
                 }
 
