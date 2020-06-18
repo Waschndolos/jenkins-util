@@ -17,56 +17,45 @@ export interface ChartOptions {
 })
 export class BuildOverviewComponent {
 
-     public chartOptions: ChartOptions = {
-        chart: {
-            width: '100%',
-            height: 5000,
-            type: 'rangeBar'
-        },
-        plotOptions: {
-            bar: {
-                horizontal: true
-            }
-        },
-        datalabels: {
-            enabled: true
-        },
-        tooltip: {
-            enabled: true,
-            shared: true,
-            custom: function ({series, seriesIndex, dataPointIndex, w}) {
-                return ('<div class="arrow_box">' +
-                     '<span>' + w.globals.labels[dataPointIndex] + '</span>' +
-                    '</div>')
-            }
-        },
-        xaxis: {
-            tooltip: {
-                enabled: true
-            },
-            labels: {
-                format: 'dd.MM - HH:mm'
-            },
-            type: 'datetime'
-        }
-    };
-    series: any = [];
+    type: string = "Timeline"
+    chartData: Array<Array<any>> =[
+        [ 'vistrpptbu1010', '', 'Deine Mutter', new Date(1789, 3, 30), new Date(1797, 2, 4) ],
+        [ 'vistrpptbu1010', '', 'Deine Mutter2', new Date(1797, 2, 4),  new Date(1801, 2, 4) ],
+        [ 'vistrpptbu1011', '', 'Deine Mutter3', new Date(1801, 2, 4),  new Date(1809, 2, 4) ],
+        [ 'vistrpptbu1012', '', 'Deine Mutter4', new Date(1901, 2, 4),  new Date(2018, 2, 4) ]
+    ]
+    colNames: Array<any> = ['Host', 'Job', {role: 'tooltip', type: 'string', p: {html: true} }, 'From', 'To']
+    options: {} = {
+        width: '1200',
+        tooltip: { isHtml: true },
+        explorer: { actions: ['dragToPan'] }
+    }
+
+
+
     builtOn: string;
     jobName: string;
     lookbackDays: number = 2;
 
     onRefresh() {
         this.buildOverviewService.getBuildOverview(this.builtOn, this.jobName, this.lookbackDays.toString()).subscribe(data => {
-            console.log(JSON.stringify(data.series))
-            this.series = data.series;
-        });
+            this.chartData = []
+            for (let row of data) {
+                console.log(JSON.stringify(row));
+                this.chartData.push([row.host, '', row.jobName, row.from, row.to])
+            }
+        })
+        // this.buildOverviewService.getBuildOverview(this.builtOn, this.jobName, this.lookbackDays.toString()).subscribe(data => {
+        //     console.log(JSON.stringify(data.series))
+        //     this.series = data.series;
+        // });
     }
 
     constructor(private buildOverviewService: BuildOverviewService) {
-        this.buildOverviewService.getBuildOverview(this.builtOn, this.jobName, this.lookbackDays.toString()).subscribe(data => {
-            console.log(JSON.stringify(data.series))
-            this.series = data.series;
-        });
+        // this.buildOverviewService.getBuildOverview(this.builtOn, this.jobName, this.lookbackDays.toString()).subscribe(data => {
+        //     console.log(JSON.stringify(data.series))
+        //     this.series = data.series;
+        // });
     }
 
 }

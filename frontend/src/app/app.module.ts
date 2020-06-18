@@ -9,6 +9,7 @@ import {BuildOverviewComponent} from './build-overview/build-overview.component'
 import {HttpClientModule} from '@angular/common/http';
 import {NgApexchartsModule} from 'ng-apexcharts';
 import {FormsModule} from "@angular/forms";
+import {GoogleChartsModule} from "angular-google-charts";
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import {FormsModule} from "@angular/forms";
         HttpClientModule,
         NgApexchartsModule,
         AppRoutingModule,
+        GoogleChartsModule,
         FormsModule
     ],
   providers: [],

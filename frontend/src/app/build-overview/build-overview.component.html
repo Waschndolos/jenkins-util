@@ -18,7 +18,8 @@
             <div class="input-group-prepend">
                 <span class="input-group-text" id="lookbackDays">- days</span>
             </div>
-            <input class="form-control ml-2" type="number" name="lookbackDays" [(ngModel)]="lookbackDays" [defaultValue]="2">
+            <input class="form-control ml-2" type="number" name="lookbackDays" [(ngModel)]="lookbackDays"
+                   [defaultValue]="2">
         </div>
 
 
@@ -27,6 +28,7 @@
         </div>
     </div>
 </form>
+<!--
 <apx-chart
         [series]="series"
         [chart]="chartOptions.chart"
@@ -35,3 +37,13 @@
         [tooltip]="chartOptions.tooltip"
 
 ></apx-chart>
+-->
+<div id="chart_wrapper">
+    <google-chart
+            [type]="type"
+            [data]="chartData"
+            [options]="options"
+            [columns]="colNames">
+
+    </google-chart>
+</div>
