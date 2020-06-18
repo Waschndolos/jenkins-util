@@ -20,6 +20,7 @@ export class BuildOverviewComponent {
      public chartOptions: ChartOptions = {
         chart: {
             width: '100%',
+            height: 5000,
             type: 'rangeBar'
         },
         plotOptions: {
@@ -35,7 +36,7 @@ export class BuildOverviewComponent {
             shared: true,
             custom: function ({series, seriesIndex, dataPointIndex, w}) {
                 return ('<div class="arrow_box">' +
-                     '<span>' + JSON.stringify(series[seriesIndex]) + '</span>' +
+                     '<span>' + w.globals.labels[dataPointIndex] + '</span>' +
                     '</div>')
             }
         },

@@ -16,6 +16,26 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+task cleanupOldFrontend(type: Delete) {
+    delete "${project.projectDir.path}/src/main/resources/static"
+}
+
+task buildFrontend(type: Exec) {
+    dependsOn cleanupOldFrontend
+    workingDir 'frontend'
+    commandLine 'cmd', '/c', 'ng build --prod'
+}
+
+task copyFrontend(type: Copy) {
+    dependsOn buildFrontend
+    from "${project.projectDir.path}/frontend/dist/frontend"
+    into "${project.projectDir.path}/src/main/resources/static"
+}
+
+bootJar {
+    dependsOn copyFrontend
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {

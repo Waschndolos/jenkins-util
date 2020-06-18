@@ -2,3 +2,4 @@
 /.idea/
 /build/
 /frontend/node_modules/
+/src/main/resources/static/
