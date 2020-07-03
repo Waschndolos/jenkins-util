@@ -16,28 +16,18 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-task cleanupOldFrontend(type: Delete) {
-    delete "${project.projectDir.path}/src/main/resources/static"
-}
-
-task buildFrontend(type: Exec) {
-    dependsOn cleanupOldFrontend
-    workingDir 'frontend'
-    commandLine 'cmd', '/c', 'ng build --prod'
-}
-
-task copyFrontend(type: Copy) {
-    dependsOn buildFrontend
-    from "${project.projectDir.path}/frontend/dist/frontend"
-    into "${project.projectDir.path}/src/main/resources/static"
-}
-
-bootJar {
-    dependsOn copyFrontend
+test {
+    useJUnitPlatform()
 }
 
 dependencies {
+
+    implementation 'commons-io:commons-io:2.7'
+    implementation 'com.offbytwo.jenkins:jenkins-client:0.3.8'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'io.micrometer:micrometer-core'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
