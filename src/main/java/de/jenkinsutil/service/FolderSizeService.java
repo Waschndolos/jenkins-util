@@ -35,12 +35,16 @@ public class FolderSizeService implements MetricProvider {
 
     public Set<String> getFoldersToCheck() throws IOException {
         if (folderSize.isEmpty()) {
-            String baseFolder = configuration.getBaseFolder();
-            List<Path> foldersToCheck = Files.walk(Paths.get(baseFolder), configuration.getDepth())
-                    .filter(Objects::nonNull)
-                    .filter(p -> !Paths.get(baseFolder).equals(p))
-                    .filter(p -> Files.isDirectory(p) && !p.equals(Paths.get(baseFolder)))
+            int minDepth = configuration.getDepth();
+            int maxDepth = configuration.getDepth();
+            Path rootPath = Paths.get(configuration.getBaseFolder());
+            int rootPathDepth = rootPath.getNameCount();
+
+            List<Path> foldersToCheck = Files.walk(rootPath, maxDepth)
+                    .filter(e -> e.toFile().isDirectory())
+                    .filter(e -> e.getNameCount() - rootPathDepth >= minDepth)
                     .collect(Collectors.toList());
+
             LOGGER.info("Checking {}", foldersToCheck);
             for (Path p : foldersToCheck) {
                 folderSize.put(p.toFile().getAbsolutePath(), null);
