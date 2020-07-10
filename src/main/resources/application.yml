@@ -1,0 +1,18 @@
+server:
+  port: 8081
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+metrics-config:
+  jenkins:
+    - jenkinsUrl: http://my-jenkins:8080/
+  files:
+    - baseFolder: "D:\\tmp"
+      fileExtension: "log"
+      scanIntervalHours: 8
+  folder:
+    - baseFolder: "D:\\tmp"
+      depth: 1
+      scanIntervalHours: 8

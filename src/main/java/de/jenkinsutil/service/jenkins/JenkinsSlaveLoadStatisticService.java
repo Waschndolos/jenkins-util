@@ -5,10 +5,9 @@ import com.offbytwo.jenkins.model.ComputerSet;
 import com.offbytwo.jenkins.model.ComputerWithDetails;
 import com.offbytwo.jenkins.model.Executor;
 import com.offbytwo.jenkins.model.Job;
+import de.jenkinsutil.config.JenkinsMonitorConfig;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -36,7 +35,19 @@ public class JenkinsSlaveLoadStatisticService extends JenkinsMetricService {
 
 
     public void registerBuildersInternal(MeterRegistry registry) throws IOException, URISyntaxException {
-        String jenkinsUrl = configuration.getJenkinsUrl();
+        List<JenkinsMonitorConfig> configs = configuration.getJenkins();
+
+        if (configs == null) {
+            return;
+        }
+
+        for (JenkinsMonitorConfig config : configs) {
+            registerURL(registry, config);
+        }
+    }
+
+    private void registerURL(MeterRegistry registry, JenkinsMonitorConfig config) throws URISyntaxException, IOException {
+        String jenkinsUrl = config.getJenkinsUrl();
         JenkinsServer server = new JenkinsServer(new URI(jenkinsUrl));
         ComputerSet computerSet = server.getComputerSet();
         for (ComputerWithDetails c : computerSet.getComputers()) {

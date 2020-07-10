@@ -1,64 +1,41 @@
 package de.jenkinsutil.config;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
-@Component
+import java.util.List;
+
+@Configuration
+@ConfigurationProperties(prefix = "metrics-config")
 public class MetricsConfiguration {
 
-    @Value("${monitor.jenkins.url}")
-    private String jenkinsUrl;
+    private List<FolderMonitorConfig> folder;
 
-    @Value("${monitor.jenkins.enabled}")
-    private boolean monitoringJenkinsEnabled;
+    private List<JenkinsMonitorConfig> jenkins;
 
-    @Value("${monitor.folder.enabled}")
-    private boolean monitoringFolderEnabled;
+    private List<FileMonitorConfig> files;
 
-    @Value("${monitor.folder.base}")
-    private String baseFolder;
-
-    @Value("${monitor.folder.depth}")
-    private int depth;
-
-    public int getDepth() {
-        return depth;
+    public List<FileMonitorConfig> getFiles() {
+        return files;
     }
 
-    public void setDepth(int depth) {
-        this.depth = depth;
+    public void setFiles(List<FileMonitorConfig> files) {
+        this.files = files;
     }
 
-    public String getBaseFolder() {
-        return baseFolder;
+    public List<FolderMonitorConfig> getFolder() {
+        return folder;
     }
 
-    public void setBaseFolder(String baseFolder) {
-        this.baseFolder = baseFolder;
+    public void setFolder(List<FolderMonitorConfig> folder) {
+        this.folder = folder;
     }
 
-    public String getJenkinsUrl() {
-        return jenkinsUrl;
+    public List<JenkinsMonitorConfig> getJenkins() {
+        return jenkins;
     }
 
-    public void setJenkinsUrl(String jenkinsUrl) {
-        this.jenkinsUrl = jenkinsUrl;
+    public void setJenkins(List<JenkinsMonitorConfig> jenkins) {
+        this.jenkins = jenkins;
     }
-
-    public boolean isMonitoringJenkinsEnabled() {
-        return monitoringJenkinsEnabled;
-    }
-
-    public void setMonitoringJenkinsEnabled(boolean monitoringJenkinsEnabled) {
-        this.monitoringJenkinsEnabled = monitoringJenkinsEnabled;
-    }
-
-    public boolean isMonitoringFolderEnabled() {
-        return monitoringFolderEnabled;
-    }
-
-    public void setMonitoringFolderEnabled(boolean monitoringFolderEnabled) {
-        this.monitoringFolderEnabled = monitoringFolderEnabled;
-    }
-
 }
