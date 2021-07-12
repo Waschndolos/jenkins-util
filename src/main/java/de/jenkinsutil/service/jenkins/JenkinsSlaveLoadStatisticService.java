@@ -4,33 +4,35 @@ import com.offbytwo.jenkins.JenkinsServer;
 import com.offbytwo.jenkins.model.ComputerSet;
 import com.offbytwo.jenkins.model.ComputerWithDetails;
 import com.offbytwo.jenkins.model.Executor;
-import com.offbytwo.jenkins.model.Job;
 import de.jenkinsutil.config.JenkinsMonitorConfig;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
 public class JenkinsSlaveLoadStatisticService extends JenkinsMetricService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsSlaveLoadStatisticService.class);
+
     public double calculateLoadStatistic(ComputerWithDetails computer) {
+        LOGGER.info("Calculating Load Statistic of {}", computer.getDisplayName());
         List<Executor> executors = computer.getExecutors();
 
-        List<Job> jobsBuildingOnComputer = new ArrayList<>();
+        boolean isIdle = true;
         for (Executor executor : executors) {
-            Job currentWorkUnit = executor.getCurrentExecutable();
-            if (currentWorkUnit != null) {
-                jobsBuildingOnComputer.add(currentWorkUnit);
+            if (executor != null && !executor.getIdle()) {
+                isIdle = false;
             }
         }
-        return jobsBuildingOnComputer.isEmpty() ? 0.0 : 1.0;
+        return isIdle ? 0.0 : 1.0;
     }
 
 
@@ -51,7 +53,7 @@ public class JenkinsSlaveLoadStatisticService extends JenkinsMetricService {
         JenkinsServer server = new JenkinsServer(new URI(jenkinsUrl));
         ComputerSet computerSet = server.getComputerSet();
         for (ComputerWithDetails c : computerSet.getComputers()) {
-            Gauge.builder("slave.building", this, (statisticService) -> statisticService.calculateLoadStatistic(c)).tag("computer", c.getDisplayName()).register(registry);
+            Gauge.builder("agent.building", this, (statisticService) -> statisticService.calculateLoadStatistic(c)).tag("computer", c.getDisplayName()).register(registry);
         }
     }
 
